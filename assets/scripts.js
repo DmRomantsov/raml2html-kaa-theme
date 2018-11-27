@@ -1,80 +1,86 @@
 "use strict";
 
 (function () {
-  $('.rest pre code').each(function(i, block) {
-    hljs.highlightBlock(block);
-  });
-
-  $('.rest-nav__item').click(function() {
-    $(this).siblings().removeClass('active');
-    $(this).addClass('active');
-  });
-
-  function turnMenuItemById(id) {
-    $('.rest-nav__link[href$="' + id + '"]')
-      .parent()
-      .addClass('active')
-      .siblings()
-      .removeClass('active');
-  }
-
-  $(window).bind('hashchange', function() {
-    var hash = document.location.hash;
-    var element = $(hash);
-    var parents = element.parents(":hidden");
-
-    turnMenuItemById(hash);
-
-    $.each(parents, function(index, parent) {
-      var id = $(parent).attr('id');
-
-      if (id) {
-        turnMenuItemById(id);
-      }
+    $('.rest pre code').each(function (i, block) {
+        hljs.highlightBlock(block);
     });
 
-    parents
-      .addClass('active')
-      .siblings()
-      .removeClass('active');
+    $('.rest-nav__item').click(function () {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+    });
 
-    element
-      .siblings()
-      .removeClass('active');
+    function turnMenuItemById(id) {
+        $('.rest-nav__link[href$="' + id + '"]')
+            .parent()
+            .addClass('active')
+            .siblings()
+            .removeClass('active');
+    }
 
-    element.addClass('active');
-  });
+    $(window).bind('hashchange', function () {
+        var hash = document.location.hash;
+        var element = $(hash);
+        var parents = element.parents(":hidden");
 
-  $(window).trigger('hashchange');
+        turnMenuItemById(hash);
 
+        $.each(parents, function (index, parent) {
+            var id = $(parent).attr('id');
 
-  //Close popup by click
-   $('.b-model__close-btn').click(function () {
-       closePopup();
-   });
+            if (id) {
+                turnMenuItemById(id);
+            }
+        });
 
-   //Close popup by press Escape
-  document.onkeydown = function(evt) {
-      evt = evt || window.event;
-      var isEscape = false;
-      if ("key" in evt) {
-          isEscape = (evt.key == "Escape" || evt.key == "Esc");
-      } else {
-          isEscape = (evt.keyCode == 27);
-      }
-      if (isEscape) {
-          console.log("ESC");
-          closePopup();
-      }
-  };
+        parents
+            .addClass('active')
+            .siblings()
+            .removeClass('active');
 
-  function closePopup() {
-      console.log("close");
+        element
+            .siblings()
+            .removeClass('active');
 
-      $('.b-model__close-btn')
-          .parents('.b-modal')
-          .removeClass('active');
+        element.addClass('active');
+    });
 
-      document.location.hash = '';
-  }
+    $(window).trigger('hashchange');
+
+    //Close popup by click
+    $('.b-model__close-btn').click(function () {
+        closePopup();
+    });
+
+    //Close popup by press Escape
+    document.onkeydown = function (evt) {
+        evt = evt || window.event;
+        var isEscape = false;
+        if ("key" in evt) {
+            isEscape = (evt.key == "Escape" || evt.key == "Esc");
+        } else {
+            isEscape = (evt.keyCode == 27);
+        }
+        if (isEscape) {
+            console.log("ESC");
+            closePopup();
+        }
+    };
+
+    //Close popup by clicking in non-popup area
+    $('.b-modal').click(function () {
+        closePopup();
+    }).children().click(function (e) {
+        return false;
+    });
+
+    function closePopup() {
+        console.log("close");
+
+        $('.b-model__close-btn')
+            .parents('.b-modal')
+            .removeClass('active');
+
+        document.location.hash = '';
+    }
 })();
